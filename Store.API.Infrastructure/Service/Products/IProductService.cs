@@ -1,4 +1,5 @@
-﻿using Store.Core.APIDto.Products;
+﻿using Store.Core.APIDto.Paging;
+using Store.Core.APIDto.Products;
 using Store.Core.APIViewModel.Categories;
 using Store.Core.APIViewModel.Products;
 using System;
@@ -11,7 +12,7 @@ namespace Store.API.Infrastructure.Service.Products
 {
     public interface IProductService
     {
-        public Task<IList<ProductViewModel>> GetAll();
+        public Task<IList<ProductViewModel>> GetAll(ApiPagingDto dto);
         public Task<ProductViewModel> GetById(int id);
         public Task<List<CategoryViewModel>> GetCategoryByProduct(int productId);
         public Task<CreateProductDto> Create(CreateProductDto dto);

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Store.Core.APIDto.Categories;
+using Store.Core.APIDto.Paging;
 using Store.Core.APIViewModel.Categories;
 using Store.Core.APIViewModel.Products;
+using Store.Core.Constant;
 using Store.Data;
 using Store.Data.DBEntities;
 using System;
@@ -22,20 +24,22 @@ namespace Store.API.Infrastructure.Service.Categories
             _context = context;
             _mapper = mapper;
         }
-        private async Task<Category> Find(int id) => await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-        public async Task<IList<CategoryViewModel>> GetAll()
+        private async Task<Category> Find(int id) => await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
+        public async Task<IList<CategoryViewModel>> GetAll(ApiPagingDto dto)
         {
             var categories = await _context.Categories.ToListAsync();
-            var categoriesViewModel = _mapper.Map<List<CategoryViewModel>>(categories);
-            return categoriesViewModel;
+            int categorySkip = (dto.CurrentPage - 1) * dto.PageSize;
+            var data =  categories.Skip(categorySkip).Take(dto.PageSize).ToList();
+            var dataViewModel = _mapper.Map<List<CategoryViewModel>>(data);
+            return dataViewModel;
         }
-
+     
         public async Task<CategoryViewModel> GetById(int id)
         {
             var category = await Find(id);
             //to be sure the category existing
             if (category == null)
-                throw new Exception("The Category is not exist!!");
+                throw new Exception(MessagesKeys.NotFound);
             return _mapper.Map<CategoryViewModel>(category);
         }
         public async Task<List<ProductViewModel>> GetProductByCategory(int categoryId)
@@ -58,7 +62,7 @@ namespace Store.API.Infrastructure.Service.Categories
             var category = await Find(id);
             //to be sure the category existing
             if (category == null)
-                throw new Exception("The Category is not exist!!");
+                throw new Exception(MessagesKeys.NotFound);
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return category.Id;
@@ -71,12 +75,14 @@ namespace Store.API.Infrastructure.Service.Categories
             var category = await Find(dto.Id);
             //to be sure the category existing
             if (category == null)
-                throw new Exception("The Category is not exist!!");
-       
+                throw new Exception(MessagesKeys.NotFound);
+
             var UpdateCategory = _mapper.Map(dto, category);
             _context.Categories.Update(UpdateCategory);
             await _context.SaveChangesAsync();
             return dto;
         }
+
+       
     }
 }

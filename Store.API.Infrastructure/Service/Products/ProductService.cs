@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Store.Core.APIDto.Paging;
 using Store.Core.APIDto.Products;
 using Store.Core.APIViewModel.Categories;
 using Store.Core.APIViewModel.Products;
+using Store.Core.Constant;
 using Store.Data;
 using Store.Data.DBEntities;
 using System;
@@ -23,13 +25,15 @@ namespace Store.API.Infrastructure.Service.Products
             _mapper = mapper;
         }
         private async Task<Product> Find(int id) => await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
-        public async Task<IList<ProductViewModel>> GetAll()
+        public async Task<IList<ProductViewModel>> GetAll(ApiPagingDto dto)
         {
             var products = await _context.Products.ToListAsync();
-            var productsViewModel = _mapper.Map<List<ProductViewModel>>(products);
-            return productsViewModel;
-
+            int productSkip = (dto.CurrentPage - 1) * dto.PageSize;
+            var data = products.Skip(productSkip).Take(dto.PageSize).ToList();
+            var dataViewModel = _mapper.Map<List<ProductViewModel>>(data);
+            return dataViewModel;
         }
+       
 
         public async Task<ProductViewModel> GetById(int id)
         {
@@ -37,7 +41,7 @@ namespace Store.API.Infrastructure.Service.Products
             //to be sure the product existing
             if (product == null)
             {
-                throw new Exception("The product is not exist!!");
+                throw new Exception(MessagesKeys.NotFound);
             }
             var productViewModel = _mapper.Map<ProductViewModel>(product);
             return productViewModel;
@@ -77,7 +81,7 @@ namespace Store.API.Infrastructure.Service.Products
             //to be sure the product existing
             if (product == null)
             {
-                throw new Exception("The product is not exist!!");
+                throw new Exception(MessagesKeys.NotFound);
             }
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
@@ -94,7 +98,7 @@ namespace Store.API.Infrastructure.Service.Products
             //to be sure the product existing
             if (product == null)
             {
-                throw new Exception("The product is not exist!!");
+                throw new Exception(MessagesKeys.NotFound);
             }
             var updateProduct = _mapper.Map(dto, product);
             _context.Products.Update(updateProduct);
@@ -103,6 +107,6 @@ namespace Store.API.Infrastructure.Service.Products
 
         }
 
-       
+      
     }
 }

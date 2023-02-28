@@ -1,4 +1,5 @@
 ﻿using Store.Core.APIDto.Categories;
+using Store.Core.APIDto.Paging;
 using Store.Core.APIViewModel.Categories;
 using Store.Core.APIViewModel.Products;
 using System;
@@ -11,7 +12,7 @@ namespace Store.API.Infrastructure.Service.Categories
 {
     public interface ICategoryService
     {
-        public Task<IList<CategoryViewModel>> GetAll();
+        public Task<IList<CategoryViewModel>> GetAll(ApiPagingDto dto);
         public Task<CategoryViewModel> GetById(int id);
         public Task<List<ProductViewModel>> GetProductByCategory(int categoryId);
         public Task<CreateCategoryDto> Create(CreateCategoryDto dto);

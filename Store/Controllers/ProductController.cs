@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.API.Infrastructure.Service.Products;
+using Store.Core.APIDto.Paging;
 using Store.Core.APIDto.Products;
+using Store.Core.APIViewModel.General;
+using Store.Core.Constant;
 
 namespace Store.API.Controllers
 {   
@@ -13,56 +16,36 @@ namespace Store.API.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page = 0 , int pageSize = 10)
         {
-            return Ok(await _productService.GetAll());
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.GetAll(new ApiPagingDto(page, pageSize)), true, MessagesKeys.success)));
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                return Ok(await _productService.GetById(id));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.GetById(id), true, MessagesKeys.success)));
         }
-        [HttpGet("~/getCategoryByProduct")]
+        [HttpGet]
         public async Task<IActionResult> getCategoryByProduct(int productId)
         {
-            return Ok(await _productService.GetCategoryByProduct(productId));
+
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.GetCategoryByProduct(productId), true, MessagesKeys.success)));
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductDto dto)
         {
-            return Ok(await _productService.Create(dto));
+
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.Create(dto), true, MessagesKeys.success)));
         }
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductDto dto)
         {
-            try
-            {
-                return Ok(await _productService.Update(dto));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.Update(dto), true, MessagesKeys.success)));
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                return Ok("The product with id : " + await _productService.Delete(id) + " has deleted successfully");
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(await GetResponse(async () => new ApiResponseViewModel(await _productService.Delete(id), true, MessagesKeys.success)));
         }
     }
 }
