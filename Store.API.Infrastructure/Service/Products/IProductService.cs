@@ -18,5 +18,8 @@ namespace Store.API.Infrastructure.Service.Products
         public Task<CreateProductDto> Create(CreateProductDto dto);
         public Task<int> Delete(int id);
         public Task<UpdateProductDto> Update(UpdateProductDto dto);
+
+        public Task<int> AppendProductToCart(AppendProductDto dto);
+        
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Store.Data;
 
@@ -11,9 +12,11 @@ using Store.Data;
 namespace Store.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230626005622_updateUserTable")]
+    partial class updateUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,22 +50,6 @@ namespace Store.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "9a00de05-ab2c-4692-82b2-d33f0f50eb7e",
-                            ConcurrencyStamp = "9a00de05-ab2c-4692-82b2-d33f0f50eb7e",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "6472ca7d-4acb-4550-9b9f-2d03321ad5e6",
-                            ConcurrencyStamp = "6472ca7d-4acb-4550-9b9f-2d03321ad5e6",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -223,13 +210,6 @@ namespace Store.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "f1446937-109c-4e1a-97ce-0560442484f5",
-                            RoleId = "9a00de05-ab2c-4692-82b2-d33f0f50eb7e"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -418,27 +398,6 @@ namespace Store.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f1446937-109c-4e1a-97ce-0560442484f5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "83446bff-c89b-42f1-ba19-99aa1a787e39",
-                            Email = "mahmoud@admin.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MAHMOUD@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEI0EL+htkBuuxdQLJOIvNLfS2aJcRiSNlDck6TLKVvzPrOGHR0OX8TcQWxfGoIiLQg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "600393d2-84f2-4a15-bf22-c9db4129b331",
-                            TwoFactorEnabled = false,
-                            UserName = "Mahmoud_Sameer",
-                            FirstName = "Mahmoud",
-                            ImageName = "ma.jpg",
-                            LastName = "Sameer",
-                            UserRole = 0
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

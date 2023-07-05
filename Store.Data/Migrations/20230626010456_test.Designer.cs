@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Store.Data;
 
@@ -11,9 +12,11 @@ using Store.Data;
 namespace Store.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230626010456_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,14 +427,14 @@ namespace Store.Data.Migrations
                         {
                             Id = "f1446937-109c-4e1a-97ce-0560442484f5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "83446bff-c89b-42f1-ba19-99aa1a787e39",
+                            ConcurrencyStamp = "86c995ce-5453-4334-8769-4aef409acc07",
                             Email = "mahmoud@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "MAHMOUD@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEI0EL+htkBuuxdQLJOIvNLfS2aJcRiSNlDck6TLKVvzPrOGHR0OX8TcQWxfGoIiLQg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJda/YfBqSavae8bME2vwldEXc0A/VsVrk+dlLGScYB2mTLinIckbcU5qrQLEWN+PA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "600393d2-84f2-4a15-bf22-c9db4129b331",
+                            SecurityStamp = "2a736db9-2bbc-46a6-aaf6-04d841b721a1",
                             TwoFactorEnabled = false,
                             UserName = "Mahmoud_Sameer",
                             FirstName = "Mahmoud",

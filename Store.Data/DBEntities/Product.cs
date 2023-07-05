@@ -19,5 +19,6 @@ namespace Store.Data.DBEntities
         public double Weight { get; set; }
         public int Quantity { get; set; }
         public List<ProductCategory> ProductCategories { get; set; }
+        public List<ShoppingCartProducts> CartProducts { get; set; }
     }
 }

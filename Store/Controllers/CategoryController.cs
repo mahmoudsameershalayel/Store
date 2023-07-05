@@ -35,7 +35,7 @@ namespace Store.API.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryDto dto)
+        public async Task<IActionResult> Create([FromForm]CreateCategoryDto dto)
         {
             return Ok(await GetResponse(async () => new ApiResponseViewModel(await _categoryService.Create(dto), true, MessagesKeys.success)));
         }

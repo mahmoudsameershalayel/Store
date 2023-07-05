@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using Abp;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Store.Core.APIDto.Cart;
 using Store.Core.APIDto.Paging;
 using Store.Core.APIDto.Products;
 using Store.Core.APIViewModel.Categories;
@@ -24,7 +26,11 @@ namespace Store.API.Infrastructure.Service.Products
             _context = context;
             _mapper = mapper;
         }
-        private async Task<Product> Find(int id) => await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+        private async Task<Product> Find(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<IList<ProductViewModel>> GetAll(ApiPagingDto dto)
         {
             var products = await _context.Products.ToListAsync();
@@ -88,10 +94,6 @@ namespace Store.API.Infrastructure.Service.Products
             return id;
         }
 
-
-
-
-
         public async Task<UpdateProductDto> Update(UpdateProductDto dto)
         {
             var product = await Find(dto.Id);
@@ -106,7 +108,42 @@ namespace Store.API.Infrastructure.Service.Products
             return dto;
 
         }
+        public async Task<ShoppingCart> Create(string userId) {
+            var cart = new ShoppingCart(userId);
+            await _context.Carts.AddAsync(cart);
+            _context.SaveChanges();
+            return cart;
+        }
+        public async Task<int> AppendProductToCart(AppendProductDto dto)
+        {
+            var _cart = await _context.Carts.Where(x => x.UserId == dto._UserId).FirstOrDefaultAsync();
+            if (_cart == null) {
+                _cart = await Create(dto._UserId);
+            }
+            await _context.CartProducts.AddAsync(new ShoppingCartProducts
+            {
+                ProductId = dto._ProductId,
+                ShoppingCartId = _cart.Id,
+                Qty = dto.Qty
+            });
+            _context.SaveChanges();
+            return _cart.Id;
+            /*var _productInCart = await _context.CartProducts.Where(x=> x.ProductId == dto._ProductId && x.ShoppingCartId == _cart.Id).FirstOrDefaultAsync();
+            if(_productInCart == null)
+            {
+                await _context.CartProducts.AddAsync(new ShoppingCartProducts
+                {
+                    ProductId = dto._ProductId,
+                    ShoppingCartId = _cart.Id,
+                    Qty = dto.Qty
+                });
+                _context.SaveChanges();
+                return _cart.Id;
+            }
+            _productInCart.Qty += dto.Qty;
+            _context.SaveChanges();
+            return _cart.Id;*/
 
-      
+        }
     }
 }
